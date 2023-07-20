@@ -1,8 +1,6 @@
 class Rectangle {
   int _width =0;
   int _height =0;
-  int getWidth =0;
-  int getHeight=0;
   void getMeasures(){
     print(" i'm rectangle. I have a height of $_height and width of $_width");
   }
