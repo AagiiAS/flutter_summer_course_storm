@@ -19,7 +19,7 @@ class GradientText extends StatelessWidget {
                 transform: GradientRotation(88.82),
               ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0))
         )
-    )
+    );
 
 
   }
