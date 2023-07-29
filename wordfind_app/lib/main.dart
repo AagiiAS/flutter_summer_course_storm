@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wordfind_app/start_page.dart';
 import 'package:wordfind_app/welcome_page.dart';
 
 void main() {
@@ -6,7 +7,7 @@ void main() {
     MaterialApp(
         title: 'Word Find Game',
         theme: ThemeData(fontFamily: 'Ribeye'),
-        home: WelcomePage()),
+        home: StartPage()),
 
   );
 }
