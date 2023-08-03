@@ -6,9 +6,11 @@ import 'package:wordfind_app/welcome_page.dart';
 void main() {
   runApp(
     MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Word Find Game',
         theme: ThemeData(fontFamily: 'Ribeye'),
-        home: TaskPage()),
+        home: WelcomePage()),
 
   );
 }
+
