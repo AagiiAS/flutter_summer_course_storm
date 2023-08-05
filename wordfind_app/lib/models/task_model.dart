@@ -10,20 +10,29 @@ class TaskModel {
   List<CharModel> puzzles = [];
   List<String> arrayButtons = [];
 
-  TaskModel({required this.pathImage,
-  required this.question,
-  required this.answer,
-  this.arrayButtons = const []
-});
-
-
-
-  setIsDone(){
-  isDone = true;
+  TaskModel(
+      {required this.pathImage,
+      required this.question,
+      required this.answer,
+      this.arrayButtons = const []});
+  setWordFindChar(List<CharModel> puzzles) {
+    this.puzzles = puzzles;
   }
 
+  setIsDone() {
+    isDone = true;
+  }
 
-
+  bool fieldCompleteCorrect() {
+    bool complete =
+        puzzles.where((puzzle) => puzzle.currentValue == null).isEmpty;
+    if (complete == false) {
+      isFull = false;
+      return complete;
+    }
+    isFull = true;
+    String answeredString =
+        puzzles.map((puzzle) => puzzle.currentValue).join("");
+    return answeredString == answer;
+  }
 }
-
-

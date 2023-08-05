@@ -2,9 +2,37 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:wordfind_app/Gradient_letter.dart';
 import 'package:wordfind_app/input_filed.dart';
+import 'data/questions.dart';
+import 'models/task_model.dart';
+import 'models/user_model.dart';
 
-class TaskPage extends StatelessWidget {
-  const TaskPage({super.key});
+// class TaskPage extends StatelessWidget {
+//   const TaskPage({super.key});
+class TaskPage extends StatefulWidget {
+  const TaskPage({required this.user, super.key});
+
+  final User user;
+
+  @override
+  State<TaskPage> createState() => _TaskPageState();
+}
+
+class _TaskPageState extends State<TaskPage> {
+  late List<TaskModel> listQuestions;
+  late User user;
+
+  @override
+  void initState() {
+    super.initState();
+    listQuestions = questions;
+    user = widget.user;
+
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +49,7 @@ class TaskPage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'Aagii',
+          user.userName,
           style: TextStyle(
             fontSize: 24,
             color: Color(0xFFE86B02),
@@ -127,14 +155,18 @@ class TaskPage extends StatelessWidget {
               child: GridView(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 7,
-                ), children: [
-
-                for (int i = 0; i < 14; i++) GestureDetector(onTap:  (){
-                  if (kDebugMode) {
-                    print('a');
-                  }
-                }, child: GradientLetter(letter: 'a'),)
-              ],
+                ),
+                children: [
+                  for (int i = 0; i < 14; i++)
+                    GestureDetector(
+                      onTap: () {
+                        if (kDebugMode) {
+                          print('a');
+                        }
+                      },
+                      child: GradientLetter(letter: 'a'),
+                    )
+                ],
               ),
             ),
 
@@ -176,3 +208,7 @@ class TaskPage extends StatelessWidget {
     );
   }
 }
+
+
+
+
