@@ -24,6 +24,7 @@ class _TaskWidgetState extends State<TaskWidget> {
     super.initState();
     size = widget.size;
     listQuestions = widget.listQuestions;
+    generatePuzzle();
   }
 
   @override
@@ -34,33 +35,38 @@ class _TaskWidgetState extends State<TaskWidget> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InkWell(
                   onTap: generateHint(),
-                  child: Row(
-                    children: [
-                      InkWell(
-                        onTap: () => generatePuzzle(left: true),
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          size: 45,
-                          color: Color(0xFFE86B02),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: generatePuzzle(next: true),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 45,
-                          color: Color(0xFFE86B02),
-                        ),
-                      )
-                    ],
+                  child: Icon(
+                    Icons.healing_outlined,
+                    size: 45,
+                    color: Color(0xFFE86B02),
                   ),
-                )
+                ),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () => generatePuzzle(left: true),
+                      child: const Icon(
+                        Icons.arrow_back_ios,
+                        size: 45,
+                        color: Color(0xFFE86B02),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: generatePuzzle(next: true),
+                      child: const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 45,
+                        color: Color(0xFFE86B02),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -85,14 +91,14 @@ class _TaskWidgetState extends State<TaskWidget> {
             alignment: Alignment.center,
             child: Text(
               currentQuestion.question,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 25,
                   color: Color(0xFFE86B02),
                   fontWeight: FontWeight.bold),
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
             alignment: Alignment.center,
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
@@ -109,7 +115,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                       } else if (currentQuestion.isFull == true) {
                         color = Colors.red;
                       } else {
-                        color = Color(0xFFE86B02);
+                        color = const Color(0xFFE86B02);
                       }
                       return InkWell(
                         onTap: () {
@@ -129,10 +135,10 @@ class _TaskWidgetState extends State<TaskWidget> {
                           ),
                           width: constraints.biggest.width / 7 - 6,
                           height: constraints.biggest.height / 7 - 6,
-                          margin: EdgeInsets.all(3),
+                          margin: const EdgeInsets.all(3),
                           child: Text(
                             (puzzle.currentValue ?? '').toUpperCase(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 25, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -142,16 +148,16 @@ class _TaskWidgetState extends State<TaskWidget> {
             ),
           ),
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30), topRight: Radius.circular(30)),
             ),
-            padding: EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 40),
+            padding: const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 40),
             alignment: Alignment.center,
-            child: Container(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            child: Column(
+              children: [GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 7,
                     childAspectRatio: 1,
                     crossAxisSpacing: 4,
@@ -167,11 +173,34 @@ class _TaskWidgetState extends State<TaskWidget> {
                       Color color = statusBtn
                           ? const Color(0xFFFBF5F2)
                           : const Color(0xFFE86B02);
-                      return Container();
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: color,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: SizedBox(
+                          height: constraints.biggest.height,
+                          child: TextButton(
+                            onPressed: () {
+                              if (!statusBtn){
+                                setBtnClick(index);
+                              }
+                            },
+                            child: Text(currentQuestion.arrayButtons[index].toUpperCase(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
                     },
                   );
                 },
-              ),
+              ),]
             ),
           )
         ],
@@ -179,12 +208,12 @@ class _TaskWidgetState extends State<TaskWidget> {
     );
   }
 
-  generatePuzzle(
-      {List<TaskModel>? Loop, bool next = false, bool left = false}) {
-    if (Loop != null) {
+  void generatePuzzle(
+      {List<TaskModel>? loop, bool next = false, bool left = false}) {
+    if (loop != null) {
       currentQuestionIndex = 0;
       listQuestions = [];
-      listQuestions.addAll(Loop);
+      listQuestions.addAll(loop);
     } else {
       if (next && currentQuestionIndex < listQuestions.length - 1) {
         currentQuestionIndex++;
@@ -208,6 +237,23 @@ class _TaskWidgetState extends State<TaskWidget> {
     final List<String> answer = [currentQuestion.answer];
 
     //final WSSettings wordSetting = WSSetting(width: 14, height: 1, orientations: List.from([WSOrientation.horizontal,]);
+    final WordSearchSafety wordSearch = WordSearchSafety();
+    final WSNewPuzzle newPuzzle = wordSearch.newPuzzle(wl, ws);
+    if(newPuzzle.errors!.isEmpty){
+      currentQuestion.arrayButtons = newPuzzle.puzzle!.expand((list) => list.toList();
+          currentQuestion.arrayBtns.shuffle();
+          bool isDone = currentQuestion.isDone;
+          if(!isDone){
+            currentQuestion.puzzles = List.generate(wl[0].split("").length, (index) => {
+                return CharModel(correctValue: currentQues.answer.split("")[index]);
+  });
+
+
+          }
+
+
+    }
+
   }
 
   generateHint() async {}
