@@ -35,4 +35,8 @@ class TaskModel {
         puzzles.map((puzzle) => puzzle.currentValue).join("");
     return answeredString == answer;
   }
+
+  TaskModel clone(){
+    return TaskModel(pathImage: pathImage, question: question, answer: answer);
+  }
 }
