@@ -26,9 +26,11 @@ class TaskWidgetState extends State<TaskWidget> {
     generatePuzzle();
   }
 
+
   @override
   Widget build(BuildContext context) {
-    TaskModel currentQuestion = listQuestions[currentQuestionIndex];
+    TaskModel currentQues = listQuestions[currentQuestionIndex];
+
     return SizedBox(
       width: double.maxFinite,
       child: Column(
@@ -40,7 +42,7 @@ class TaskWidgetState extends State<TaskWidget> {
               children: [
                 InkWell(
                   onTap: () => generateHint(),
-                  child: Icon(
+                  child: const Icon(
                     Icons.healing_outlined,
                     size: 45,
                     color: Color(0xFFE86B02),
@@ -49,7 +51,9 @@ class TaskWidgetState extends State<TaskWidget> {
                 Row(
                   children: [
                     InkWell(
-                      onTap: () => generatePuzzle(left: true),
+                      onTap: () => generatePuzzle(
+                        left: true,
+                      ),
                       child: const Icon(
                         Icons.arrow_back_ios,
                         size: 45,
@@ -57,7 +61,9 @@ class TaskWidgetState extends State<TaskWidget> {
                       ),
                     ),
                     InkWell(
-                      onTap: () => generatePuzzle(next: true),
+                      onTap: () => generatePuzzle(
+                        next: true,
+                      ),
                       child: const Icon(
                         Icons.arrow_forward_ios,
                         size: 45,
@@ -65,84 +71,88 @@ class TaskWidgetState extends State<TaskWidget> {
                       ),
                     ),
                   ],
-                ),
+                )
               ],
             ),
           ),
           Expanded(
             child: Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Container(
                 alignment: Alignment.center,
                 constraints: BoxConstraints(
                   maxWidth: size.width / 2 * 1.5,
                 ),
                 child: Image.network(
-                  currentQuestion.pathImage,
+                  currentQues.pathImage,
                   fit: BoxFit.contain,
                 ),
               ),
             ),
           ),
           Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(10),
             alignment: Alignment.center,
             child: Text(
-              currentQuestion.question,
+              currentQues.question,
               style: const TextStyle(
-                  fontSize: 25,
-                  color: Color(0xFFE86B02),
-                  fontWeight: FontWeight.bold),
+                fontSize: 25,
+                color: Color(0xFFE86B02),
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
             alignment: Alignment.center,
             child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
+              builder: (context, constraints) {
                 return Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: currentQuestion.puzzles.map((puzzle) {
-                      Color? color;
-                      if (currentQuestion.isDone) {
-                        color = Colors.green[300];
-                      } else if (puzzle.hintShow) {
-                        color = Colors.yellow[300];
-                      } else if (currentQuestion.isFull) {
-                        color = Colors.red;
-                      } else {
-                        color = const Color(0xFFE86B02);
-                      }
-                      return InkWell(
-                        onTap: () {
-                          if (puzzle.hintShow ||
-                              currentQuestion.isDone)
-                            return;
-                            currentQuestion.isFull = false;
-                            puzzle.clearValue();
-                            setState(() {});
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: currentQues.puzzles.map((puzzle) {
+                    Color? color;
 
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: color,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          width: constraints.biggest.width / 7 - 6,
-                          height: constraints.biggest.height / 7 - 6,
-                          margin: const EdgeInsets.all(3),
-                          child: Text(
-                            (puzzle.currentValue ?? '').toUpperCase(),
-                            style: const TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
+                    if (currentQues.isDone) {
+                      color = Colors.green[300];
+                    } else if (puzzle.hintShow) {
+                      color = Colors.yellow[100];
+                    } else if (currentQues.isFull) {
+                      color = Colors.red;
+                    } else {
+                      color = const Color(0xFFE86B02);
+                    }
+
+                    return InkWell(
+                      onTap: () {
+                        if (puzzle.hintShow || currentQues.isDone) return;
+
+                        currentQues.isFull = false;
+                        puzzle.clearValue();
+                        setState(() {});
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: color,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        width: constraints.biggest.width / 7 - 6,
+                        height: constraints.biggest.width / 7 - 6,
+                        margin: const EdgeInsets.all(3),
+                        child: Text(
+                          (puzzle.currentValue ?? '').toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      );
-                    }).toList());
+                      ),
+                    );
+                  }).toList(),
+                );
               },
             ),
           ),
@@ -155,62 +165,71 @@ class TaskWidgetState extends State<TaskWidget> {
             padding:
             const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 40),
             alignment: Alignment.center,
-            child: Column(children: [
-              GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 7,
+            child: Column(
+              children: [
+                GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 1,
+                    crossAxisCount: 7,
                     crossAxisSpacing: 4,
-                    mainAxisSpacing: 14),
-                itemCount: 14,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  bool statusBtn = currentQuestion.puzzles.indexWhere(
-                          (puzzle) => puzzle.currentIndex == index) >=
-                      0;
-                  return LayoutBuilder(
-                    builder: (context, constraints) {
-                      Color color = statusBtn
-                          ? const Color(0xFFFBF5F2)
-                          : const Color(0xFFE86B02);
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: color,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          height: constraints.biggest.height,
-                          child: TextButton(
-                            onPressed: () {
-                              if (!statusBtn) {
-                                setBtnClick(index);
-                              }
-                            },
-                            child: Text(
-                              currentQuestion.arrayButtons[index].toUpperCase(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
+                    mainAxisSpacing: 4,
+                  ),
+                  itemCount: 14,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    bool statusBtn = currentQues.puzzles.indexWhere(
+                            (puzzle) => puzzle.currentIndex == index) >=
+                        0;
+
+                    return LayoutBuilder(
+                      builder: (context, constraints) {
+                        Color color = statusBtn
+                            ? const Color(0xFFFBF5F2)
+                            : const Color(0xFFE86B02);
+
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: color,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            height: constraints.biggest.height,
+                            child: TextButton(
+                              child: Text(
+                                currentQues.arrayButtons[index].toUpperCase(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
+                              onPressed: () {
+                                if (!statusBtn) setBtnClick(index);
+                              },
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ]),
-          )
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  void generatePuzzle(
-      {List<TaskModel>? loop, bool next = false, bool left = false}) {
+
+
+  void generatePuzzle({
+    List<TaskModel>? loop,
+    bool next = false,
+    bool left = false,
+  }) {
+    // lets finish up generate puzzle
     if (loop != null) {
       currentQuestionIndex = 0;
       listQuestions = [];
@@ -224,38 +243,43 @@ class TaskWidgetState extends State<TaskWidget> {
         return;
       }
 
-    setState(() {});
-      if (listQuestions[currentQuestionIndex].isDone)
-        return;
+      setState(() {});
+
+      if (listQuestions[currentQuestionIndex].isDone) return;
     }
-    TaskModel currentQuestion = listQuestions[currentQuestionIndex];
+
+    TaskModel currentQues = listQuestions[currentQuestionIndex];
+
     setState(() {});
-    final List<String> wl = [currentQuestion.answer];
 
-    // final List<String> answer = [currentQuestion.answer];
+    final List<String> wl = [currentQues.answer];
 
-    final WSSettings wordSetting = WSSettings(
-      width: 14,
+    final WSSettings ws = WSSettings(
+      width: 14, // total random word row we want use
       height: 1,
       orientations: List.from([
         WSOrientation.horizontal,
       ]),
     );
+
     final WordSearchSafety wordSearch = WordSearchSafety();
-    final WSNewPuzzle newPuzzle = wordSearch.newPuzzle(wl, wordSetting);
+
+    final WSNewPuzzle newPuzzle = wordSearch.newPuzzle(wl, ws);
+
     if (newPuzzle.errors!.isEmpty) {
-      currentQuestion.arrayButtons =
+      currentQues.arrayButtons =
           newPuzzle.puzzle!.expand((list) => list).toList();
-      currentQuestion.arrayButtons.shuffle();
-      bool isDone = currentQuestion.isDone;
+      currentQues.arrayButtons.shuffle();
+
+      bool isDone = currentQues.isDone;
+
       if (!isDone) {
-        currentQuestion.puzzles =
-            List.generate(wl[0].split("").length, (index) {
-              return CharModel(
-                  correctValue: currentQuestion.answer.split("")[index]);
-            });
+        currentQues.puzzles = List.generate(wl[0].split("").length, (index) {
+          return CharModel(correctValue: currentQues.answer.split("")[index]);
+        });
       }
     }
+
     hintCount = 0;
     setState(() {});
   }
