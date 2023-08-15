@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "334447486193",
+    "project_id": "lesson-20-aagi",
+    "storage_bucket": "lesson-20-aagi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:334447486193:android:8914817c32fb57a92ef550",
+        "android_client_info": {
+          "package_name": "com.example.lesson_20_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "334447486193-9bs168hn5dj4kn3k8gagrlq4tqrafhfd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD69RgMcLoUsdNuzGdcUO-ZaYWB5jVhe34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "334447486193-9bs168hn5dj4kn3k8gagrlq4tqrafhfd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
