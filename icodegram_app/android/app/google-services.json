@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "520771294216",
+    "project_id": "icodegram-e89e0",
+    "storage_bucket": "icodegram-e89e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:520771294216:android:b66aee3f0bf55470ce6dbd",
+        "android_client_info": {
+          "package_name": "com.example.icodegram_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "520771294216-tfqjo8fbd4hn34fonpbv5cpak93j00kt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuyGT5kAIOYzAEFmudSLY6L09GWOSiMsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "520771294216-tfqjo8fbd4hn34fonpbv5cpak93j00kt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
