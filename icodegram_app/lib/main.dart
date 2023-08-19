@@ -8,6 +8,8 @@ void main() async {
   runApp(MaterialApp(
     home: LoginPage(),
     debugShowCheckedModeBanner: false,
+    theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 1),
+        textTheme: Typography().white.apply(fontFamily: 'Rubik')),
   ));
 }
-
